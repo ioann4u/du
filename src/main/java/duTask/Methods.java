@@ -1,3 +1,5 @@
+package duTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -9,7 +11,6 @@ public class Methods {
     private Boolean flagSi;
     private List<String> names;
     private List<Long> lengths;
-
 
     Methods() {
         this.flagH = false;
@@ -30,7 +31,6 @@ public class Methods {
     public Boolean getFlagSi() {
         return flagSi;
     }
-
 
     void commandParse(String[] args) {
         if (args[0].equals("du")) {
@@ -72,7 +72,7 @@ public class Methods {
                 } else if (length < (base * base * base)) {
                     System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base) + " MB");
                 } else {
-                    System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base) + " GB");
+                    System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base * base) + " GB");
                 }
                 sum += length;
             }
