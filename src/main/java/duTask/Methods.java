@@ -1,16 +1,22 @@
 package duTask;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 
-public class Methods {
+class Methods {
 
     private Boolean flagH;
     private Boolean flagC;
     private Boolean flagSi;
     private List<String> names;
-    private List<Long> lengths;
+    public List<Long> lengths;
+    private double sum;
+
+
 
     Methods() {
         this.flagH = false;
@@ -18,18 +24,23 @@ public class Methods {
         this.flagSi = false;
         this.names = new ArrayList<String>();
         this.lengths = new ArrayList<Long>();
+        this.sum = 0.0;
     }
 
-    public Boolean getFlagH() {
+    Boolean getFlagH() {
         return flagH;
     }
 
-    public Boolean getFlagC() {
+    Boolean getFlagC() {
         return flagC;
     }
 
-    public Boolean getFlagSi() {
+    Boolean getFlagSi() {
         return flagSi;
+    }
+
+    List<Long> getLengths() {
+        return lengths;
     }
 
     void commandParse(String[] args) {
@@ -48,49 +59,52 @@ public class Methods {
         } else throw new IllegalArgumentException("Unknown method");
     }
 
-    void findLength() {
+    void findLength() throws URISyntaxException {
+
         for (String name : names) {
-            File file = new File(name);
+            URL res = getClass().getClassLoader().getResource("AncientMechs/" + name);
+            File file = Paths.get(res.toURI()).toFile();
             if (file.exists()) {
                 this.lengths.add(file.length());
             }
         }
     }
 
+    List<Double> count(int base) {
+        List<Double> outPut = new ArrayList<>();
+        for (Long length : this.lengths) {
+            if (length < base) {
+                System.out.println(names.get(lengths.indexOf(length)) + " " + length + " B");
+                outPut.add((double) length);
+            } else if (length < (base * base)) {
+                System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / base + " KB");
+                outPut.add((double) length / base);
+            } else if (length < (base * base * base)) {
+                System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base) + " MB");
+                outPut.add((double) length / (base * base));
+            } else {
+                System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base * base) + " GB");
+                outPut.add((double) length / (base * base * base));
+            }
+            this.sum += length;
+        }
+        return outPut;
+    }
+
     void outputFileLength() {
-        double sum = 0;
         int base = 0;
         if (this.flagSi) {
             base = 1000;
         } else base = 1024;
         if (this.flagH) {
-            for (Long length : this.lengths) {
-                if (length < base) {
-                    System.out.println(names.get(lengths.indexOf(length)) + " " + length + " B");
-                } else if (length < (base * base)) {
-                    System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / base + " KB");
-                } else if (length < (base * base * base)) {
-                    System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base) + " MB");
-                } else {
-                    System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base * base) + " GB");
-                }
-                sum += length;
-            }
+            List<Double> countMethod = count(base);
         } else for (Long length : this.lengths) {
             System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / base);
-            sum += length;
+            this.sum += length;
         }
 
         if (this.flagC) {
-            if (sum < base) {
-                System.out.println(sum + "B");
-            } else if (sum < (base * base)) {
-                System.out.println(sum / base + "KB");
-            } else if (sum < (base * base * base)) {
-                System.out.println(sum / (base * base) + "MB");
-            } else {
-                System.out.println(sum + "GB");
-            }
+            System.out.println(this.sum / base);
         }
     }
 }
