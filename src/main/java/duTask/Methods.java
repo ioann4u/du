@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.io.File;
 
@@ -13,18 +14,21 @@ class Methods {
     private Boolean flagC;
     private Boolean flagSi;
     private List<String> names;
-    public List<Long> lengths;
+    private List<Long> lengths;
+    private HashMap<String, Long> size;
     private double sum;
-
+    private int base;
 
 
     Methods() {
         this.flagH = false;
         this.flagC = false;
         this.flagSi = false;
+        this.size = new HashMap<String, Long>();
         this.names = new ArrayList<String>();
         this.lengths = new ArrayList<Long>();
         this.sum = 0.0;
+        this.base = 0;
     }
 
     Boolean getFlagH() {
@@ -43,35 +47,41 @@ class Methods {
         return lengths;
     }
 
-    void commandParse(String[] args) {
-        if (args[0].equals("du")) {
-            for (String i : args) {
-                if (i.equals("-h")) {
-                    this.flagH = true;
-                } else if (i.equals("-c")) {
-                    this.flagC = true;
-                } else if (i.equals("--si")) {
-                    this.flagSi = true;
-                } else if (!i.equals("du")) {
-                    this.names.add(i);
-                }
+
+    private long getFolderSize(File folder) {
+        long length = 0;
+        File[]files = folder.listFiles();
+
+        assert files != null;
+        int count = files.length;
+
+        for (File file : files) {
+            if (file.isFile()) {
+                length += file.length();
+            } else {
+                length += getFolderSize(file);
             }
-        } else throw new IllegalArgumentException("Unknown method");
+        }
+        return length;
     }
 
-    void findLength() throws URISyntaxException {
-
+    void findLength() {
         for (String name : names) {
-            URL res = getClass().getClassLoader().getResource("AncientMechs/" + name);
-            File file = Paths.get(res.toURI()).toFile();
-            if (file.exists()) {
+            File file = new File(name);
+            if (file.exists()&& file.isDirectory()) {
+                this.lengths.add(getFolderSize(file));
+            }
+            else if (file.exists() && !file.isDirectory()) {
                 this.lengths.add(file.length());
             }
         }
     }
 
-    List<Double> count(int base) {
-        List<Double> outPut = new ArrayList<>();
+    List<Double> count() {
+        List<Double> outPut = new ArrayList<Double>();
+        if (this.flagSi) {
+            base = 1000;
+        } else base = 1024;
         for (Long length : this.lengths) {
             if (length < base) {
                 System.out.println(names.get(lengths.indexOf(length)) + " " + length + " B");
@@ -92,17 +102,15 @@ class Methods {
     }
 
     void outputFileLength() {
-        int base = 0;
         if (this.flagSi) {
             base = 1000;
         } else base = 1024;
         if (this.flagH) {
-            List<Double> countMethod = count(base);
+            List<Double> countMethod = count();
         } else for (Long length : this.lengths) {
             System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / base);
             this.sum += length;
         }
-
         if (this.flagC) {
             System.out.println(this.sum / base);
         }
