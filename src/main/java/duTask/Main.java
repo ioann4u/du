@@ -6,6 +6,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.Option;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Main {
     @Option(name = "--si", usage = "Another base")
     private boolean flagSi;
 
-    @Argument(required = true)
+    @Argument(required = true, usage = "")
     public List<String> names;
 
 
@@ -35,10 +36,11 @@ public class Main {
         }
 
         Methods method = new Methods();
+        //ArrayList<String> output =
         try {
             List<Double> res = method.count();
             for (Double length : res)
-                System.out.println(length);
+                System.out.println(Double.toString(length));
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(1);

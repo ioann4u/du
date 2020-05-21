@@ -12,17 +12,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MethodsTest {
 
-/**
+
     @Test
     void commandParseAllFlags() {
         Methods ex = new Methods();
         String[] command;
-        command = "du -h -c --si test/resources/AncientMechs/ancient_robot1.jpg".split(" ");
-        ex.commandParse(command);
-        assertTrue(ex.getFlagH());
+        Main.main(new String[]{"-c", "--si", "resources/AncientMechs/ancient_robot1.jpg"});
+        //assertTrue(ex.getFlagH());
         assertTrue(ex.getFlagC());
         assertTrue(ex.getFlagSi());
+        //assertEquals(ex.outputFileLength(), ex.getLengths());
     }
+/**
     @Test
     void commandParseHCFlag() {
         Methods ex = new Methods();

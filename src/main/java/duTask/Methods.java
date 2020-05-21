@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.File;
+import java.util.Objects;
 
 class Methods {
 
@@ -15,16 +16,16 @@ class Methods {
     private Boolean flagSi;
     private List<String> names;
     private List<Long> lengths;
-    private HashMap<String, Long> size;
+    //private HashMap<String, Long> size;
     private double sum;
     private int base;
 
 
-    Methods() {
+    public Methods() {
         this.flagH = false;
         this.flagC = false;
         this.flagSi = false;
-        this.size = new HashMap<String, Long>();
+        //this.size = new HashMap<String, Long>();
         this.names = new ArrayList<String>();
         this.lengths = new ArrayList<Long>();
         this.sum = 0.0;
@@ -50,11 +51,8 @@ class Methods {
 
     private long getFolderSize(File folder) {
         long length = 0;
-        File[]files = folder.listFiles();
-
-        assert files != null;
+        File[] files = folder.listFiles();
         int count = files.length;
-
         for (File file : files) {
             if (file.isFile()) {
                 length += file.length();
@@ -65,25 +63,31 @@ class Methods {
         return length;
     }
 
-    void findLength() {
+    public void findLength() {
         for (String name : names) {
             File file = new File(name);
-            if (file.exists()&& file.isDirectory()) {
+            if (file.exists() && file.isDirectory()) {
                 this.lengths.add(getFolderSize(file));
-            }
-            else if (file.exists() && !file.isDirectory()) {
+            } else if (file.exists() && !file.isDirectory()) {
                 this.lengths.add(file.length());
             }
         }
     }
 
-    List<Double> count() {
+    public List<Double> count() {
         List<Double> outPut = new ArrayList<Double>();
+        Long i = 0L;
         if (this.flagSi) {
             base = 1000;
         } else base = 1024;
+
         for (Long length : this.lengths) {
-            if (length < base) {
+            for (Long c = length; c < base;) {
+                c = length / base;
+                i = c;
+            }
+            outPut.add((double) i);
+            /**if (length < base) {
                 System.out.println(names.get(lengths.indexOf(length)) + " " + length + " B");
                 outPut.add((double) length);
             } else if (length < (base * base)) {
@@ -95,13 +99,13 @@ class Methods {
             } else {
                 System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base * base) + " GB");
                 outPut.add((double) length / (base * base * base));
-            }
-            this.sum += length;
+            }*/
+            this.sum += i;
         }
         return outPut;
     }
 
-    void outputFileLength() {
+    private void outputFileLength() {
         if (this.flagSi) {
             base = 1000;
         } else base = 1024;
@@ -114,5 +118,23 @@ class Methods {
         if (this.flagC) {
             System.out.println(this.sum / base);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Methods meth = (Methods) o;
+        return flagC == meth.flagC &&
+                flagH == meth.flagH &&
+                flagSi == meth.flagSi &&
+                Objects.equals(names, meth.names);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(flagC, flagH, flagSi, names);
     }
 }
