@@ -5,6 +5,7 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.Option;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class Main {
     @Option(name = "--si", usage = "Another base")
     private boolean flagSi;
 
-    @Argument(required = true, usage = "")
+    @Argument(required = true, usage = "File names")
     public List<String> names;
 
 
@@ -35,12 +36,14 @@ public class Main {
             System.exit(1);
         }
 
-        Methods method = new Methods();
-        //ArrayList<String> output =
+        Methods method = new Methods(flagH, flagC, flagSi);
+        List<File> fileList = method.getNames();
         try {
-            List<Double> res = method.count();
-            for (Double length : res)
-                System.out.println(Double.toString(length));
+            System.out.println(method.getHumanFormattedSize());
+            System.out.println(method.outputFileLength());
+            //for (int j = 0; j < fileList.size(); j++) {
+              //  System.out.println(method.count(method.findLength()));
+            //}
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(1);

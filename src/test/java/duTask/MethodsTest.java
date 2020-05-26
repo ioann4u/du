@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MethodsTest {
 
-
+/**
     @Test
     void commandParseAllFlags() {
         Methods ex = new Methods();
@@ -21,9 +21,9 @@ class MethodsTest {
         //assertTrue(ex.getFlagH());
         assertTrue(ex.getFlagC());
         assertTrue(ex.getFlagSi());
-        //assertEquals(ex.outputFileLength(), ex.getLengths());
+        assertEquals(ex.outputFileLength(), ex.findLength());
     }
-/**
+
     @Test
     void commandParseHCFlag() {
         Methods ex = new Methods();
