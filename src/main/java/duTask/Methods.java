@@ -17,54 +17,67 @@ class Methods {
     private Boolean flagC;
     private Boolean flagSi;
     private List<File> names;
-    //private HashMap<String, Long> size;
-    private int base;
+    private int sum;
 
 
     public Methods(Boolean fH, Boolean fC, Boolean fSi) {
         this.flagH = fH;
         this.flagC = fC;
         this.flagSi = fSi;
-        //this.size = new HashMap<String, Long>();
-        this.names = new ArrayList<File>();
-        this.base = 0;
+        this.names = new ArrayList<>();
+        this.sum = 0;
+    }
+
+    public void setFlagH(Boolean flagH) {
+        this.flagH = flagH;
     }
 
     public Boolean getFlagH() {
         return flagH;
     }
 
+    public void setFlagC(Boolean flagC) {
+        this.flagC = flagC;
+    }
+
     public Boolean getFlagC() {
         return flagC;
+    }
+
+    public void setFlagSi(Boolean flagSi) {
+        this.flagSi = flagSi;
     }
 
     public Boolean getFlagSi() {
         return flagSi;
     }
 
-    public List<File> getNames() {
-        return names;
+
+    public List<File> files(File testFile) {
+        ArrayList<File> fileList = new ArrayList<>();
+        fileList.add(testFile);
+        return fileList;
     }
 
-
-
-    private long getFolderSize(File folder) {
+    private static long getFolderSize(File folder) {
         long length = 0;
         File[] files = folder.listFiles();
+
         int count = files.length;
-        for (File file : files) {
-            if (file.isFile()) {
-                length += file.length();
+
+        for (int i = 0; i < count; i++) {
+            if (files[i].isFile()) {
+                length += files[i].length();
             } else {
-                length += getFolderSize(file);
+                length += getFolderSize(files[i]);
             }
         }
         return length;
     }
 
-    public List<Long> findLength() {
+    public List<Long> findLength(File file) {
         List<Long> lengths = new ArrayList<>();
-        for (File name : names) {
+        for (File name : files(file)) {
             if (name.exists() && name.isDirectory()) {
                 lengths.add(getFolderSize(name));
             } else if (name.exists() && !name.isDirectory()) {
@@ -74,88 +87,55 @@ class Methods {
         return lengths;
     }
 
-    public List<String> getHumanFormattedSize() {
+    public List<String> getHumanFormattedSize(List<Long> fileSizes, File file) {
         List<String> out = new ArrayList<String>();
-        List<Long> fileSizes = new ArrayList<Long>(findLength());
+        fileSizes = new ArrayList<Long>(findLength(file));
         String[] n = new String[]{"Б", "Кб", "Мб", "Гб"};
         Long i = 0L;
         Long counter = 0L;
         int count = 0;
+        int base = 0;
         if (this.flagSi) {
             base = 1000;
         } else base = 1024;
 
-        for (Long length : findLength()) {
-
-            for (Long c = length; c < base; ) {
-                c /= base;
-                i = c;
-                count++;
+        if (this.flagH) {
+            for (Long length : fileSizes) {
+                if (length < base) {
+                    out.add(files(file) + " " + length + " b");
+                } else if (length < base * base) {
+                    out.add(files(file) + " " + (double) length / base + " Kb");
+                } else if (length < base * base * base) {
+                    out.add(files(file) + " " + (double) length / (base * base) + " Mb");
+                } else if (length < base * base * base * base) {
+                    out.add(files(file) + " " + (double) length / (base * base * base) + " Gb");
+                }
+                this.sum += length;
             }
-            counter++;
-            out.add(names + " " + i.toString() + n[count]);
+        } else for (Long length : fileSizes) {
+            out.add(files(file) + " " + length.toString() + " b");
+            this.sum += length;
         }
         return out;
     }
 
-    /**public String  count(List<Long> fileSizes) {
-        List<Long> outPut = new ArrayList<Long>();
-        fileSizes = findLength();
-        String[] n = new String[]{"Б", "Кб", "Мб", "Гб"};
-        Long i = 0L;
-        Long counter = 0L;
-        int count = 0;
-        if (this.flagSi) {
-            base = 1000;
-        } else base = 1024;
-
-        for (Long length : fileSizes) {
-
-            for (Long c = length; c < base;) {
-                c /= base;
-                i = c;
-                count++;
-            }
-            counter++;
-            outPut.add(i);
-
-        /**if (length < base) {
-                System.out.println(names.get(lengths.indexOf(length)) + " " + length + " B");
-                outPut.add((double) length);
-            } else if (length < (base * base)) {
-                System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / base + " KB");
-                outPut.add((double) length / base);
-            } else if (length < (base * base * base)) {
-                System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base) + " MB");
-                outPut.add((double) length / (base * base));
-            } else {
-                System.out.println(names.get(lengths.indexOf(length)) + " " + ((double) length) / (base * base * base) + " GB");
-                outPut.add((double) length / (base * base * base));
-
-            //this.sum += i;
-
+    public String s() {
+        String printSum = "";
+        int base = 0;
+        if (this.flagSi) base = 1000;
+        else base = 1024;
+        if (!this.flagH) {
+            printSum = "Sum = " + this.sum + " b";
+        } else {
+            if (this.sum < base * base)
+                printSum = "Sum = " + this.sum / base + " Kb";
+            else if (this.sum < base * base * base)
+                printSum = "Sum = " + this.sum / (base * base) + " Mb";
+            else if (this.sum < base * base * base * base)
+                printSum = "Sum = " + this.sum / (base * base * base) + " Gb";
         }
-        return (names.get(findLength().indexOf(counter)) + findLength().toString() + n[count]);
-    }
-     */
-
-
-    public List<String> outputFileLength() {
-        List<String> outputValues = new ArrayList<String>();
-        if (this.flagSi) {
-            base = 1000;
-        } else base = 1024;
-        if (this.flagH) {
-            List<Long> countMethod = findLength();
-        } else for (Long length : findLength()) {
-           // outputValues.add(names.get(findLength().indexOf(length)+ " " + (((toString()) length) /base);
-            System.out.println(names.get(findLength().indexOf(length)) + " " + ((double) length) / base);
-            //this.sum += length;
-        }
-        if (this.flagC) {
-            //System.out.println(this.sum / base);
-        }
-        return outputValues;
+        this.sum = 0;
+        return printSum;
     }
 
     @Override

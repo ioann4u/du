@@ -24,8 +24,7 @@ public class Main {
     private boolean flagSi;
 
     @Argument(required = true, usage = "File names")
-    public List<String> names;
-
+    private ArrayList<File> names;
 
     private void commandLineArgument(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
@@ -37,13 +36,15 @@ public class Main {
         }
 
         Methods method = new Methods(flagH, flagC, flagSi);
-        List<File> fileList = method.getNames();
         try {
-            System.out.println(method.getHumanFormattedSize());
-            System.out.println(method.outputFileLength());
-            //for (int j = 0; j < fileList.size(); j++) {
-              //  System.out.println(method.count(method.findLength()));
-            //}
+            if (!names.isEmpty()) {
+                for (File name : names) {
+                    System.out.println(method.getHumanFormattedSize(method.findLength(name), name));
+                }
+            }
+            if (flagC) {
+                System.out.println(method.s());
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(1);
@@ -53,5 +54,4 @@ public class Main {
     public static void main(String[] args) {
         new Main().commandLineArgument(args);
     }
-
 }

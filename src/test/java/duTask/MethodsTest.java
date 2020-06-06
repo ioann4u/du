@@ -1,28 +1,64 @@
 package duTask;
 
+import com.sun.glass.ui.Size;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MethodsTest {
-
 /**
+    List<String> sizeList(String[] args) {
+        List<String> listOfSize = new ArrayList<>();
+        Methods ex = new Methods();
+        List<File> fileList = ex.files();
+        for (int j = 0; j < fileList.size(); j++) {
+            Size element = new Size(fileList.get(j));
+            listOfSize.add(ex.necessarySizeOutput(element.getSize()));
+        }
+        return listOfSize;
+
+    }
+
     @Test
     void commandParseAllFlags() {
-        Methods ex = new Methods();
-        String[] command;
-        Main.main(new String[]{"-c", "--si", "resources/AncientMechs/ancient_robot1.jpg"});
-        //assertTrue(ex.getFlagH());
-        assertTrue(ex.getFlagC());
-        assertTrue(ex.getFlagSi());
-        assertEquals(ex.outputFileLength(), ex.findLength());
+        Main.main(new String[]{"-h", "--si", "resources/AncientMechs/ancient_robot1.jpg"});
+        assertEquals(Arrays.asList("[ancient_robot1.jpg] 284.674 Kb"), new String[]{"-h", "--si", "resources/AncientMechs/ancient_robot1.jpg"});
     }
+
+/**
+    Methods ex = new Methods();
+
+     @Test
+     void getFlagH() {
+     assertFalse(ex.getFlagH());
+     }
+
+    @Test
+    void getFlagC() {
+        assertFalse(ex.getFlagC());
+    }
+
+    @Test
+    void getFlagSi() {
+        assertFalse(ex.getFlagSi());
+    }
+
+    @Test
+    void getListOfFiles() {
+
+    }
+
+
+
+
 
     @Test
     void commandParseHCFlag() {
@@ -92,5 +128,5 @@ class MethodsTest {
     void outputFileLength() {
         //ex.count();
     }
-    */
+ */
 }
