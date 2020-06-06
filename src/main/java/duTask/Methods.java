@@ -1,12 +1,6 @@
 package duTask;
 
-//import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.io.File;
 import java.util.Objects;
@@ -134,7 +128,6 @@ class Methods {
             else if (this.sum < base * base * base * base)
                 printSum = "Sum = " + this.sum / (base * base * base) + " Gb";
         }
-        this.sum = 0;
         return printSum;
     }
 
