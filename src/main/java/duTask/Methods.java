@@ -84,7 +84,6 @@ class Methods {
     public List<String> getHumanFormattedSize(List<Long> fileSizes, File file) {
         List<String> out = new ArrayList<String>();
         fileSizes = new ArrayList<Long>(findLength(file));
-        String[] n = new String[]{"Б", "Кб", "Мб", "Гб"};
         Long i = 0L;
         Long counter = 0L;
         int count = 0;

@@ -58,7 +58,7 @@ class MethodsTest {
 
     @Test
     void FalseGetFlagSi() {
-        assertTrue(ex2.getFlagSi());
+        assertFalse(ex2.getFlagSi());
     }
 
     @Test
