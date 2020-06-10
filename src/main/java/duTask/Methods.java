@@ -116,17 +116,18 @@ class Methods {
     public String s() {
         String printSum = "";
         int base = 0;
+        int sumOfSum = this.sum;
         if (this.flagSi) base = 1000;
         else base = 1024;
         if (!this.flagH) {
-            printSum = "Sum = " + this.sum + " b";
+            printSum = "Sum = " + sumOfSum + " b";
         } else {
             if (this.sum < base * base)
-                printSum = "Sum = " + this.sum / base + " Kb";
+                printSum = "Sum = " + sumOfSum / base + " Kb";
             else if (this.sum < base * base * base)
-                printSum = "Sum = " + this.sum / (base * base) + " Mb";
+                printSum = "Sum = " + sumOfSum / (base * base) + " Mb";
             else if (this.sum < base * base * base * base)
-                printSum = "Sum = " + this.sum / (base * base * base) + " Gb";
+                printSum = "Sum = " + sumOfSum / (base * base * base) + " Gb";
         }
         return printSum;
     }
