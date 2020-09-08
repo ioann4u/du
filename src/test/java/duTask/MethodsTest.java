@@ -30,10 +30,10 @@ class MethodsTest {
     @Test
     void getHumanFormattedSizeAllFlags() {
         ArrayList<String> test = new ArrayList<>();
-        test.add("[C:\\Users\\mi2\\IdeaProjects\\du\\src\\test\\resources\\AncientMechs\\ancient_robot1.jpg] 284.674 Kb");
-        File tested = new File("C:\\Users\\mi2\\IdeaProjects\\du\\src\\test\\resources\\AncientMechs\\ancient_robot1.jpg");
+        test.add("[src\\main\\resources\\AncientMechs\\ancient_robot1.jpg] 284.674 Kb");
+        File tested = new File("src/main/resources/AncientMechs/ancient_robot1.jpg");
         String test3 = "Sum = 284 Kb";
-        assertEquals(ex.getHumanFormattedSize(ex.findLength(tested), tested), test);
+        assertEquals(test, ex.getHumanFormattedSize(ex.findLength(tested), tested));
         assertEquals(ex.s(), test3);
 
     }
@@ -42,7 +42,7 @@ class MethodsTest {
     void findLengthAllFlags() {
         ArrayList<Long> test2 = new ArrayList<>();
         test2.add(284674L);
-        File tested = new File("C:\\Users\\mi2\\IdeaProjects\\du\\src\\test\\resources\\AncientMechs\\ancient_robot1.jpg");
+        File tested = new File("src/main/resources/AncientMechs/ancient_robot1.jpg");
         assertEquals(ex.findLength(tested), test2);
     }
 
@@ -64,8 +64,8 @@ class MethodsTest {
     @Test
     void getHumanFormattedSizeOnlyCFlag() {
         ArrayList<String> test = new ArrayList<>();
-        test.add("[C:\\Users\\mi2\\IdeaProjects\\du\\src\\test\\resources\\AncientMechs\\ancient_robot1.jpg] 284674 b");
-        File tested = new File("C:\\Users\\mi2\\IdeaProjects\\du\\src\\test\\resources\\AncientMechs\\ancient_robot1.jpg");
+        test.add("[src\\main\\resources\\AncientMechs\\ancient_robot1.jpg] 284674 b");
+        File tested = new File("src/main/resources/AncientMechs/ancient_robot1.jpg");
         String test3 = "Sum = 284674 b";
         assertEquals(ex2.getHumanFormattedSize(ex2.findLength(tested), tested), test);
         assertEquals(ex2.s(), test3);
@@ -76,7 +76,7 @@ class MethodsTest {
     void findLengthOnlyCFlag() {
         ArrayList<Long> test2 = new ArrayList<>();
         test2.add(284674L);
-        File tested = new File("C:\\Users\\mi2\\IdeaProjects\\du\\src\\test\\resources\\AncientMechs\\ancient_robot1.jpg");
+        File tested = new File("src/main/resources/AncientMechs/ancient_robot1.jpg");
         assertEquals(ex2.findLength(tested), test2);
     }
 
